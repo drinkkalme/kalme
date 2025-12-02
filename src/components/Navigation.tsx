@@ -6,7 +6,7 @@ export const Navigation = () => {
       <div className="max-w-7xl mx-auto px-4 h-20 flex items-center justify-between">
         {/* Logo */}
         <div className="flex items-center">
-          <h1 className="text-2xl font-serif font-bold bg-gradient-gold bg-clip-text text-transparent">
+          <h1 className="text-2xl font-serif font-bold bg-gradient-blue bg-clip-text text-transparent">
             Kalmē
           </h1>
         </div>
@@ -25,7 +25,7 @@ export const Navigation = () => {
         </div>
 
         {/* CTA Button */}
-        <Button className="bg-gradient-gold text-primary-foreground font-semibold hover:opacity-90 transition-opacity">
+        <Button className="bg-primary text-primary-foreground font-semibold hover:bg-primary/90 transition-all">
           Pre-Order
         </Button>
       </div>

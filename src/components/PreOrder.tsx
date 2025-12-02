@@ -14,7 +14,7 @@ export const PreOrder = () => {
         <Card className="p-12 bg-card/80 backdrop-blur-xl border-border/50 shadow-premium">
           <div className="text-center space-y-8">
             {/* Gift icon */}
-            <div className="w-20 h-20 mx-auto rounded-full bg-gradient-gold flex items-center justify-center">
+            <div className="w-20 h-20 mx-auto rounded-full bg-primary flex items-center justify-center">
               <Gift className="w-10 h-10 text-primary-foreground" />
             </div>
 
@@ -50,7 +50,7 @@ export const PreOrder = () => {
             {/* CTA Button */}
             <Button 
               size="lg"
-              className="bg-gradient-gold text-primary-foreground font-semibold hover:opacity-90 transition-opacity px-12 text-lg h-14"
+              className="bg-primary text-primary-foreground font-semibold hover:bg-primary/90 transition-all px-12 text-lg h-14"
             >
               Reserve Your Free Sachet
             </Button>

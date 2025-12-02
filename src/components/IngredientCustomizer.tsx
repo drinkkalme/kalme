@@ -79,13 +79,13 @@ export const IngredientCustomizer = () => {
           onDragStart={handleDragStart}
           onDragEnd={handleDragEnd}
         >
-          <div className="grid lg:grid-cols-2 gap-8">
+          <div className="grid lg:grid-cols-[2fr_1fr] gap-8">
             {/* Available ingredients */}
             <div>
               <h3 className="text-2xl font-semibold mb-6 text-foreground">
                 Available Ingredients
               </h3>
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
                 {availableIngredients.map((ingredient) => (
                   <DraggableIngredient
                     key={ingredient}

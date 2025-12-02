@@ -2,6 +2,7 @@ import { EmailPopup } from "@/components/EmailPopup";
 import { Navigation } from "@/components/Navigation";
 import { Hero } from "@/components/Hero";
 import { Ingredients } from "@/components/Ingredients";
+import { IngredientCustomizer } from "@/components/IngredientCustomizer";
 import { Benefits } from "@/components/Benefits";
 import { PreOrder } from "@/components/PreOrder";
 import { Footer } from "@/components/Footer";
@@ -13,6 +14,7 @@ const Index = () => {
       <Navigation />
       <Hero />
       <Ingredients />
+      <IngredientCustomizer />
       <Benefits />
       <PreOrder />
       <Footer />

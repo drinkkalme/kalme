@@ -54,7 +54,7 @@ export default {
       },
       backgroundImage: {
         "gradient-royal": "var(--gradient-royal)",
-        "gradient-gold": "var(--gradient-gold)",
+        "gradient-blue": "var(--gradient-blue)",
         "gradient-accent": "var(--gradient-accent)",
       },
       borderRadius: {

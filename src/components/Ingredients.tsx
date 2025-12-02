@@ -36,9 +36,9 @@ export const Ingredients = () => {
       <div className="relative z-10 max-w-7xl mx-auto">
         {/* Section header */}
         <div className="text-center space-y-4 mb-16">
-          <h2 className="text-5xl md:text-6xl font-serif font-bold">
-            Calm,
-            <span className="block bg-gradient-blue bg-clip-text text-transparent italic">
+          <h2 className="text-5xl md:text-6xl font-serif font-bold inline-flex items-center justify-center gap-3 flex-wrap">
+            <span className="whitespace-nowrap">Calm,</span>
+            <span className="bg-gradient-blue bg-clip-text text-transparent italic whitespace-nowrap">
               Designed.
             </span>
           </h2>

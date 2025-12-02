@@ -32,7 +32,7 @@ export const Benefits = () => {
         <div className="text-center space-y-4 mb-16">
           <h2 className="text-5xl md:text-6xl font-serif font-bold">
             Why Choose
-            <span className="block bg-gradient-gold bg-clip-text text-transparent">
+            <span className="block bg-gradient-blue bg-clip-text text-transparent">
               Kalmē?
             </span>
           </h2>

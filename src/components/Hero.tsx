@@ -23,7 +23,7 @@ export const Hero = () => {
         {/* Main heading */}
         <h1 className="text-6xl md:text-8xl font-serif font-bold tracking-tight animate-fade-in-up" style={{ animationDelay: "0.1s" }}>
           Find Your
-          <span className="block bg-gradient-gold bg-clip-text text-transparent">
+          <span className="block bg-gradient-blue bg-clip-text text-transparent">
             Calm
           </span>
         </h1>
@@ -38,7 +38,7 @@ export const Hero = () => {
         <div className="flex flex-col sm:flex-row gap-4 justify-center items-center animate-fade-in-up" style={{ animationDelay: "0.3s" }}>
           <Button 
             size="lg" 
-            className="bg-gradient-gold text-primary-foreground font-semibold hover:opacity-90 transition-opacity group px-8"
+            className="bg-primary text-primary-foreground font-semibold hover:bg-primary/90 transition-all group px-8"
           >
             Pre-Order Now
             <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
@@ -61,7 +61,7 @@ export const Hero = () => {
             { value: "1", label: "Free Sachet" },
           ].map((stat, idx) => (
             <div key={idx} className="space-y-2">
-              <div className="text-4xl md:text-5xl font-serif font-bold bg-gradient-gold bg-clip-text text-transparent">
+              <div className="text-4xl md:text-5xl font-serif font-bold bg-gradient-blue bg-clip-text text-transparent">
                 {stat.value}
               </div>
               <div className="text-sm text-muted-foreground uppercase tracking-wider">

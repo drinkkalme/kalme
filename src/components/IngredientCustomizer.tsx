@@ -1,8 +1,16 @@
 import { useState } from "react";
-import { DndContext, DragEndEvent, DragOverlay, DragStartEvent, closestCenter } from "@dnd-kit/core";
-import { Card } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { X } from "lucide-react";
+import {
+  DndContext,
+  DragEndEvent,
+  DragOverlay,
+  DragStartEvent,
+  closestCenter,
+  PointerSensor,
+  useSensor,
+  useSensors,
+} from "@dnd-kit/core";
+import { DraggableIngredient } from "./DraggableIngredient";
+import { DroppableBox } from "./DroppableBox";
 
 const availableIngredients = [
   "Ashwagandha",
@@ -19,6 +27,14 @@ const availableIngredients = [
 export const IngredientCustomizer = () => {
   const [selectedIngredients, setSelectedIngredients] = useState<string[]>([]);
   const [activeId, setActiveId] = useState<string | null>(null);
+
+  const sensors = useSensors(
+    useSensor(PointerSensor, {
+      activationConstraint: {
+        distance: 8,
+      },
+    })
+  );
 
   const handleDragStart = (event: DragStartEvent) => {
     setActiveId(event.active.id as string);
@@ -58,6 +74,7 @@ export const IngredientCustomizer = () => {
         </div>
 
         <DndContext
+          sensors={sensors}
           collisionDetection={closestCenter}
           onDragStart={handleDragStart}
           onDragEnd={handleDragEnd}
@@ -102,123 +119,5 @@ export const IngredientCustomizer = () => {
         </DndContext>
       </div>
     </section>
-  );
-};
-
-// Draggable ingredient component
-const DraggableIngredient = ({
-  ingredient,
-  isSelected,
-}: {
-  ingredient: string;
-  isSelected: boolean;
-}) => {
-  const [isDragging, setIsDragging] = useState(false);
-
-  return (
-    <div
-      draggable={!isSelected}
-      onDragStart={(e) => {
-        if (!isSelected) {
-          e.dataTransfer.effectAllowed = "move";
-          e.dataTransfer.setData("text/plain", ingredient);
-          setIsDragging(true);
-        } else {
-          e.preventDefault();
-        }
-      }}
-      onDragEnd={() => setIsDragging(false)}
-      className={`
-        bg-card/50 backdrop-blur-sm border border-border/50 rounded-lg p-4 
-        transition-all duration-300
-        ${
-          isSelected
-            ? "opacity-40 cursor-not-allowed"
-            : "hover:border-primary/50 hover:shadow-lg cursor-grab active:cursor-grabbing"
-        }
-        ${isDragging ? "opacity-50" : ""}
-      `}
-    >
-      <p className="text-sm font-medium text-foreground text-center">
-        {ingredient}
-      </p>
-    </div>
-  );
-};
-
-// Droppable box component
-const DroppableBox = ({
-  id,
-  ingredients,
-  onRemove,
-}: {
-  id: string;
-  ingredients: string[];
-  onRemove: (ingredient: string) => void;
-}) => {
-  const [isOver, setIsOver] = useState(false);
-
-  return (
-    <Card
-      id={id}
-      onDragOver={(e) => {
-        e.preventDefault();
-        setIsOver(true);
-      }}
-      onDragLeave={() => setIsOver(false)}
-      onDrop={(e) => {
-        e.preventDefault();
-        const ingredient = e.dataTransfer.getData("text/plain");
-        if (!ingredients.includes(ingredient) && ingredients.length < 3) {
-          // This will be handled by DndContext
-        }
-        setIsOver(false);
-      }}
-      className={`
-        min-h-[400px] p-8 bg-gradient-accent backdrop-blur-sm
-        border-2 border-dashed transition-all duration-300
-        ${
-          isOver
-            ? "border-primary bg-accent/30 shadow-glow"
-            : "border-border/50"
-        }
-      `}
-    >
-      {ingredients.length === 0 ? (
-        <div className="flex items-center justify-center h-full">
-          <p className="text-muted-foreground text-center">
-            Drag ingredients here
-            <br />
-            <span className="text-sm">(up to 3)</span>
-          </p>
-        </div>
-      ) : (
-        <div className="space-y-3">
-          {ingredients.map((ingredient) => (
-            <div
-              key={ingredient}
-              className="bg-card/80 border border-primary/30 rounded-lg p-4 flex items-center justify-between group hover:border-primary/60 transition-all"
-            >
-              <p className="text-sm font-medium text-foreground">
-                {ingredient}
-              </p>
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={() => onRemove(ingredient)}
-                className="h-6 w-6 opacity-60 group-hover:opacity-100 hover:bg-destructive/20 hover:text-destructive"
-              >
-                <X className="h-4 w-4" />
-              </Button>
-            </div>
-          ))}
-          {ingredients.length < 3 && (
-            <div className="text-sm text-muted-foreground text-center pt-4">
-              Add {3 - ingredients.length} more ingredient{ingredients.length !== 2 ? "s" : ""}
-            </div>
-          )}
-        </div>
-      )}
-    </Card>
   );
 };

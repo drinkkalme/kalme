@@ -1,30 +1,29 @@
 import { Card } from "@/components/ui/card";
-import { Droplet, Brain, Leaf, Heart } from "lucide-react";
 
 const ingredients = [
   {
-    icon: Droplet,
-    name: "Magnesium",
-    description: "Essential mineral that supports muscle relaxation, reduces stress, and promotes better sleep quality.",
-    benefits: ["Reduces stress", "Improves sleep", "Muscle relaxation"],
-  },
-  {
-    icon: Brain,
+    symbol: "L",
     name: "L-Theanine",
-    description: "Amino acid found in tea leaves that promotes relaxation without drowsiness and enhances focus.",
-    benefits: ["Promotes calm", "Enhances focus", "Reduces anxiety"],
+    description: "Reduces stress & improves focus",
+    image: "🍃",
   },
   {
-    icon: Leaf,
-    name: "Monk Fruit",
-    description: "Natural zero-calorie sweetener that provides sweetness without the sugar crash or artificial aftertaste.",
-    benefits: ["Zero calories", "Natural sweetness", "No sugar crash"],
+    symbol: "Mg",
+    name: "Magnesium",
+    description: "Calm nervous system & improved sleep",
+    image: "⚛️",
   },
   {
-    icon: Heart,
+    symbol: "In",
     name: "Inulin",
-    description: "Prebiotic fiber that supports gut health, aids digestion, and helps maintain a healthy microbiome.",
-    benefits: ["Gut health", "Digestive support", "Prebiotic fiber"],
+    description: "Supports gut health (Prebiotic)",
+    image: "🌿",
+  },
+  {
+    symbol: "Mf",
+    name: "Monk Fruit",
+    description: "0-calorie sweetener",
+    image: "🍈",
   },
 ];
 
@@ -38,9 +37,9 @@ export const Ingredients = () => {
         {/* Section header */}
         <div className="text-center space-y-4 mb-16">
           <h2 className="text-5xl md:text-6xl font-serif font-bold">
-            Science-Backed
-            <span className="block bg-gradient-gold bg-clip-text text-transparent">
-              Ingredients
+            Calm,
+            <span className="block bg-gradient-blue bg-clip-text text-transparent italic">
+              Designed.
             </span>
           </h2>
           <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
@@ -49,48 +48,50 @@ export const Ingredients = () => {
         </div>
 
         {/* Ingredients grid */}
-        <div className="grid md:grid-cols-2 gap-6">
+        <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
           {ingredients.map((ingredient, idx) => (
             <Card 
               key={idx}
-              className="p-8 bg-card/50 backdrop-blur-sm border-border/50 hover:border-primary/50 transition-all duration-300 hover:shadow-premium group"
+              className="p-8 bg-card/30 backdrop-blur-sm border border-border/30 hover:border-primary/50 transition-all duration-300 hover:shadow-premium group relative overflow-hidden"
               style={{ animationDelay: `${idx * 0.1}s` }}
             >
-              <div className="flex items-start gap-6">
-                {/* Icon */}
-                <div className="w-14 h-14 rounded-xl bg-gradient-accent flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform">
-                  <ingredient.icon className="w-7 h-7 text-foreground" />
+              {/* Glow effect on hover */}
+              <div className="absolute inset-0 bg-gradient-blue opacity-0 group-hover:opacity-5 transition-opacity duration-300" />
+              
+              <div className="relative">
+                {/* Top section with ingredient name and symbol */}
+                <div className="flex items-start justify-between mb-4">
+                  <div className="flex-1">
+                    <div className="flex items-center gap-3 mb-2">
+                      <div className="text-3xl">{ingredient.image}</div>
+                      <h3 className="text-2xl font-serif font-semibold text-foreground">
+                        {ingredient.name}
+                      </h3>
+                    </div>
+                  </div>
+                  
+                  {/* Chemical-style symbol */}
+                  <div className="w-12 h-12 rounded-full border-2 border-border/50 flex items-center justify-center bg-secondary/50 group-hover:border-primary/50 transition-colors">
+                    <span className="text-sm font-mono font-semibold text-muted-foreground group-hover:text-primary transition-colors">
+                      {ingredient.symbol}
+                    </span>
+                  </div>
                 </div>
 
-                {/* Content */}
-                <div className="space-y-3 flex-1">
-                  <h3 className="text-2xl font-serif font-semibold text-foreground">
-                    {ingredient.name}
-                  </h3>
-                  <p className="text-muted-foreground leading-relaxed">
+                {/* Description in rounded box */}
+                <div className="bg-secondary/30 border border-border/30 rounded-full px-6 py-3 group-hover:border-primary/30 transition-colors">
+                  <p className="text-foreground text-center text-sm">
                     {ingredient.description}
                   </p>
-                  
-                  {/* Benefits */}
-                  <div className="flex flex-wrap gap-2 pt-2">
-                    {ingredient.benefits.map((benefit, i) => (
-                      <span 
-                        key={i}
-                        className="px-3 py-1 rounded-full text-xs bg-secondary/50 text-foreground border border-border/50"
-                      >
-                        {benefit}
-                      </span>
-                    ))}
-                  </div>
                 </div>
               </div>
             </Card>
           ))}
         </div>
 
-        {/* Bottom CTA */}
+        {/* Bottom note */}
         <div className="text-center mt-16">
-          <p className="text-muted-foreground mb-4">
+          <p className="text-muted-foreground">
             All ingredients are natural, non-GMO, and carefully sourced for maximum effectiveness.
           </p>
         </div>

@@ -50,12 +50,7 @@ export default {
       },
       fontFamily: {
         sans: ["Inter", "system-ui", "sans-serif"],
-        serif: ["Playfair Display", "Georgia", "serif"],
-      },
-      backgroundImage: {
-        "gradient-royal": "var(--gradient-royal)",
-        "gradient-blue": "var(--gradient-blue)",
-        "gradient-accent": "var(--gradient-accent)",
+        serif: ["Cormorant Garamond", "Georgia", "serif"],
       },
       borderRadius: {
         lg: "var(--radius)",
@@ -64,27 +59,17 @@ export default {
       },
       keyframes: {
         "accordion-down": {
-          from: {
-            height: "0",
-          },
-          to: {
-            height: "var(--radix-accordion-content-height)",
-          },
+          from: { height: "0" },
+          to: { height: "var(--radix-accordion-content-height)" },
         },
         "accordion-up": {
-          from: {
-            height: "var(--radix-accordion-content-height)",
-          },
-          to: {
-            height: "0",
-          },
+          from: { height: "var(--radix-accordion-content-height)" },
+          to: { height: "0" },
         },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
-        float: "float 6s ease-in-out infinite",
-        "fade-in-up": "fadeInUp 0.8s ease-out forwards",
       },
     },
   },

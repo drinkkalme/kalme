@@ -1,38 +1,84 @@
+import { Link } from "react-router-dom";
+
 export const Footer = () => {
   return (
-    <footer className="py-12 px-4 border-t border-border/50">
-      <div className="max-w-7xl mx-auto">
-        <div className="flex flex-col md:flex-row justify-between items-center gap-6">
+    <footer className="py-20 px-6 border-t border-border/50">
+      <div className="max-w-6xl mx-auto">
+        <div className="grid md:grid-cols-4 gap-12 mb-16">
           {/* Brand */}
-          <div className="text-center md:text-left">
-            <h3 className="text-2xl font-serif font-bold bg-gradient-gold bg-clip-text text-transparent">
-              Kalmē
-            </h3>
-            <p className="text-sm text-muted-foreground mt-1">
-              Find your calm, naturally.
+          <div className="md:col-span-2">
+            <Link to="/" className="text-3xl font-serif tracking-wider">
+              kalmē
+            </Link>
+            <p className="mt-4 text-muted-foreground leading-relaxed max-w-md">
+              A premium evening wellness brand creating calming tools, rituals, 
+              and beverages that help you unwind without switching off.
             </p>
           </div>
 
-          {/* Links */}
-          <div className="flex gap-8 text-sm text-muted-foreground">
-            <a href="#" className="hover:text-primary transition-colors">
-              About
-            </a>
-            <a href="#" className="hover:text-primary transition-colors">
-              Ingredients
-            </a>
-            <a href="#" className="hover:text-primary transition-colors">
-              Contact
-            </a>
-            <a href="#" className="hover:text-primary transition-colors">
-              Privacy
-            </a>
+          {/* Navigation */}
+          <div>
+            <h4 className="text-sm tracking-wider uppercase text-muted-foreground mb-6">
+              Navigate
+            </h4>
+            <nav className="space-y-4">
+              <Link
+                to="/"
+                className="block text-foreground/80 hover:text-foreground transition-colors"
+              >
+                Home
+              </Link>
+              <Link
+                to="/about"
+                className="block text-foreground/80 hover:text-foreground transition-colors"
+              >
+                About
+              </Link>
+              <Link
+                to="/breathing"
+                className="block text-foreground/80 hover:text-foreground transition-colors"
+              >
+                Breathing Rituals
+              </Link>
+              <Link
+                to="/contact"
+                className="block text-foreground/80 hover:text-foreground transition-colors"
+              >
+                Contact
+              </Link>
+            </nav>
           </div>
 
-          {/* Copyright */}
-          <div className="text-sm text-muted-foreground">
-            © 2025 Kalmē. All rights reserved.
+          {/* Connect */}
+          <div>
+            <h4 className="text-sm tracking-wider uppercase text-muted-foreground mb-6">
+              Connect
+            </h4>
+            <div className="space-y-4">
+              <a
+                href="mailto:drinkkalme@gmail.com"
+                className="block text-foreground/80 hover:text-foreground transition-colors"
+              >
+                drinkkalme@gmail.com
+              </a>
+              <Link
+                to="/waitlist"
+                className="block text-foreground/80 hover:text-foreground transition-colors"
+              >
+                Join Waitlist
+              </Link>
+            </div>
           </div>
+        </div>
+
+        {/* Bottom */}
+        <div className="pt-8 border-t border-border/30 flex flex-col md:flex-row justify-between items-center gap-4">
+          <p className="text-sm text-muted-foreground">
+            © 2025 kalmē. All rights reserved.
+          </p>
+          <p className="text-sm text-muted-foreground">
+            Crafted with intention.
+          </p>
         </div>
       </div>
     </footer>

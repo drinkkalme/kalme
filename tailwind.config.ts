@@ -47,6 +47,15 @@ export default {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
+        navy: {
+          deep: "hsl(var(--navy-deep))",
+          dark: "hsl(var(--navy-dark))",
+          mid: "hsl(var(--navy-mid))",
+        },
+        blue: {
+          glow: "hsl(var(--blue-glow))",
+          soft: "hsl(var(--blue-soft))",
+        },
       },
       fontFamily: {
         sans: ["Inter", "system-ui", "sans-serif"],
@@ -70,6 +79,11 @@ export default {
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
+      },
+      boxShadow: {
+        'premium': '0 25px 50px -12px hsl(215 80% 55% / 0.15)',
+        'glow': '0 0 40px hsl(215 80% 55% / 0.2)',
+        'glow-strong': '0 0 60px hsl(215 80% 55% / 0.3)',
       },
     },
   },

@@ -1,18 +1,24 @@
 import { Navigation } from "@/components/Navigation";
 import { Hero } from "@/components/Hero";
 import { WhySection } from "@/components/WhySection";
-import { WhatWeOffer } from "@/components/WhatWeOffer";
-import { ComingSoon } from "@/components/ComingSoon";
+import { IngredientsSection } from "@/components/IngredientsSection";
+import { EveningRitualSection } from "@/components/EveningRitualSection";
+import { StudioPreview } from "@/components/StudioPreview";
+import { SachetTeaser } from "@/components/SachetTeaser";
+import { EmailCapture } from "@/components/EmailCapture";
 import { Footer } from "@/components/Footer";
 
 const Index = () => {
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen">
       <Navigation />
       <Hero />
       <WhySection />
-      <WhatWeOffer />
-      <ComingSoon />
+      <IngredientsSection />
+      <EveningRitualSection />
+      <StudioPreview />
+      <SachetTeaser />
+      <EmailCapture />
       <Footer />
     </div>
   );

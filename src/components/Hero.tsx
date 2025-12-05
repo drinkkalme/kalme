@@ -10,14 +10,13 @@ export const Hero = () => {
 
   const toggleSound = () => {
     if (!soundEnabled) {
-      // Create ambient hum
       audioContextRef.current = new (window.AudioContext || (window as any).webkitAudioContext)();
       oscillatorRef.current = audioContextRef.current.createOscillator();
       gainNodeRef.current = audioContextRef.current.createGain();
       
       oscillatorRef.current.type = 'sine';
-      oscillatorRef.current.frequency.setValueAtTime(110, audioContextRef.current.currentTime);
-      gainNodeRef.current.gain.setValueAtTime(0.02, audioContextRef.current.currentTime);
+      oscillatorRef.current.frequency.setValueAtTime(80, audioContextRef.current.currentTime);
+      gainNodeRef.current.gain.setValueAtTime(0.015, audioContextRef.current.currentTime);
       
       oscillatorRef.current.connect(gainNodeRef.current);
       gainNodeRef.current.connect(audioContextRef.current.destination);
@@ -43,20 +42,24 @@ export const Hero = () => {
   }, []);
 
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden noise-overlay">
-      {/* Ambient Background */}
+    <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
+      {/* Aurora Background */}
       <div className="absolute inset-0">
-        <div className="absolute inset-0 gradient-navy-radial" />
-        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[900px] h-[900px] rounded-full gradient-blue-glow animate-breathe-circle opacity-40" />
-        <div className="absolute bottom-1/4 right-1/4 w-[400px] h-[400px] rounded-full bg-primary/5 blur-[100px] animate-pulse-soft" />
+        <div className="absolute inset-0 bg-background" />
+        {/* Main aurora glow */}
+        <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[1000px] h-[600px] bg-gradient-radial from-grey-aurora/40 via-grey-aurora/10 to-transparent rounded-full blur-[100px] animate-aurora" />
+        {/* Secondary glow */}
+        <div className="absolute bottom-1/3 right-1/4 w-[400px] h-[400px] bg-grey-glow/10 rounded-full blur-[80px] animate-pulse-soft" />
+        {/* Bottom fade */}
         <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-border to-transparent" />
       </div>
 
-      {/* Pre-order Badge */}
+      {/* Top Micro-Line */}
       <div className="absolute top-28 left-1/2 -translate-x-1/2 opacity-0 animate-fade-in delay-100">
-        <div className="flex items-center gap-2 text-xs tracking-[0.2em] text-primary uppercase">
-          <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
-          Pre-orders opening soon
+        <div className="flex items-center gap-3 text-xs tracking-[0.25em] text-muted-foreground uppercase">
+          <span className="w-8 h-px bg-gradient-to-r from-transparent to-grey-soft/50" />
+          A new way to unwind
+          <span className="w-8 h-px bg-gradient-to-l from-transparent to-grey-soft/50" />
         </div>
       </div>
 
@@ -71,49 +74,38 @@ export const Hero = () => {
 
       {/* Content */}
       <div className="relative z-10 max-w-4xl mx-auto px-6 text-center">
-        {/* Tagline */}
-        <p className="text-sm tracking-[0.3em] text-muted-foreground uppercase mb-8 opacity-0 animate-fade-in delay-200">
-          Evening Wellness, Reimagined
-        </p>
-
         {/* Main Heading */}
-        <h1 className="text-5xl md:text-7xl lg:text-8xl font-serif leading-[1.1] mb-6 opacity-0 animate-fade-in-up delay-300">
-          Find Your
+        <h1 className="text-5xl md:text-7xl lg:text-8xl font-serif leading-[1.05] mb-6 opacity-0 animate-fade-in-up delay-200">
+          For the Evenings
           <br />
-          <span className="text-gradient-blue">Calm</span>
+          That Need Softening
         </h1>
 
-        {/* Subtext */}
-        <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed mb-12 opacity-0 animate-fade-in-up delay-400">
-          Premium calming beverages crafted with science-backed ingredients.
-          <br className="hidden md:block" />
-          Designed to help you unwind without switching off.
+        {/* Subheadline */}
+        <p className="text-xl md:text-2xl text-muted-foreground mb-12 opacity-0 animate-fade-in-up delay-300">
+          Unwind without switching off.
         </p>
 
         {/* CTA Buttons */}
-        <div className="flex flex-col sm:flex-row gap-4 justify-center items-center opacity-0 animate-fade-in-up delay-500">
+        <div className="flex flex-col sm:flex-row gap-4 justify-center items-center opacity-0 animate-fade-in-up delay-400">
           <Link to="/waitlist" className="btn-primary">
-            Pre-order Now
-          </Link>
-          <Link to="/waitlist" className="btn-secondary">
             Join the Waitlist
+          </Link>
+          <Link to="/spin" className="btn-secondary">
+            Spin to Win
           </Link>
         </div>
 
         {/* Tertiary CTA */}
-        <div className="mt-8 opacity-0 animate-fade-in-up delay-600">
-          <Link
-            to="/studio"
-            className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors group"
-          >
-            Explore the kalmē Studio
-            <span className="group-hover:translate-x-1 transition-transform">→</span>
-          </Link>
+        <div className="mt-6 opacity-0 animate-fade-in-up delay-500">
+          <span className="text-sm text-muted-foreground">
+            Pre-order Coming Soon
+          </span>
         </div>
       </div>
 
       {/* Scroll Indicator */}
-      <div className="absolute bottom-12 left-1/2 -translate-x-1/2 opacity-0 animate-fade-in delay-700">
+      <div className="absolute bottom-12 left-1/2 -translate-x-1/2 opacity-0 animate-fade-in delay-600">
         <a
           href="#story"
           className="flex flex-col items-center gap-2 text-muted-foreground hover:text-foreground transition-colors"

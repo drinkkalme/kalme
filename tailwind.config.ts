@@ -47,14 +47,10 @@ export default {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
-        navy: {
-          deep: "hsl(var(--navy-deep))",
-          dark: "hsl(var(--navy-dark))",
-          mid: "hsl(var(--navy-mid))",
-        },
-        blue: {
-          glow: "hsl(var(--blue-glow))",
-          soft: "hsl(var(--blue-soft))",
+        grey: {
+          glow: "hsl(var(--grey-glow))",
+          soft: "hsl(var(--grey-soft))",
+          aurora: "hsl(var(--grey-aurora))",
         },
       },
       fontFamily: {
@@ -81,9 +77,10 @@ export default {
         "accordion-up": "accordion-up 0.2s ease-out",
       },
       boxShadow: {
-        'premium': '0 25px 50px -12px hsl(215 80% 55% / 0.15)',
-        'glow': '0 0 40px hsl(215 80% 55% / 0.2)',
-        'glow-strong': '0 0 60px hsl(215 80% 55% / 0.3)',
+        'premium': '0 25px 50px -12px hsl(0 0% 50% / 0.15)',
+        'glow': '0 0 40px hsl(0 0% 50% / 0.2)',
+        'glow-strong': '0 0 60px hsl(0 0% 60% / 0.3)',
+        'aurora': '0 0 100px hsl(0 0% 40% / 0.3)',
       },
     },
   },

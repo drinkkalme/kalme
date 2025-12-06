@@ -24,7 +24,6 @@ export const Navigation = () => {
     { name: "Studio", path: "/studio" },
     { name: "Custom Blend", path: "/builder" },
     { name: "About", path: "/about" },
-    { name: "Contact", path: "/contact" },
   ];
 
   return (
@@ -35,52 +34,52 @@ export const Navigation = () => {
           : "bg-transparent py-5"
       }`}
     >
-      <div className="max-w-7xl mx-auto px-6 lg:px-8">
+      <div className="max-w-6xl mx-auto px-6">
         <div className="flex items-center justify-between">
           {/* Logo */}
           <Link
             to="/"
-            className="text-2xl font-serif tracking-wider text-foreground hover:text-primary transition-colors duration-300"
+            className="text-2xl font-serif tracking-wider text-foreground hover:text-foreground/80 transition-colors duration-300"
           >
             kalmē
           </Link>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center gap-10">
+          <div className="hidden md:flex items-center gap-8">
             {navLinks.map((link) => (
               <Link
                 key={link.path}
                 to={link.path}
-                className={`text-sm tracking-wide transition-all duration-300 hover:text-primary relative group ${
+                className={`text-sm tracking-wide transition-all duration-300 hover:text-foreground relative group ${
                   location.pathname === link.path
                     ? "text-foreground"
                     : "text-muted-foreground"
                 }`}
               >
                 {link.name}
-                <span className={`absolute -bottom-1 left-0 h-px bg-primary transition-all duration-300 ${
+                <span className={`absolute -bottom-1 left-0 h-px bg-foreground/50 transition-all duration-300 ${
                   location.pathname === link.path ? "w-full" : "w-0 group-hover:w-full"
                 }`} />
               </Link>
             ))}
           </div>
 
-          {/* CTA Buttons */}
-          <div className="hidden md:flex items-center gap-4">
+          {/* CTA Button */}
+          <div className="hidden md:flex items-center">
             <Link
               to="/waitlist"
-              className="px-5 py-2.5 text-sm tracking-wide bg-primary text-primary-foreground hover:bg-primary/90 transition-all duration-300 hover:shadow-lg hover:shadow-primary/20"
+              className="px-5 py-2 text-sm tracking-wide bg-foreground text-background rounded-full hover:bg-foreground/90 transition-all duration-300 hover:scale-[1.02]"
             >
-              Pre-order
+              Join Waitlist
             </Link>
           </div>
 
           {/* Mobile Menu Button */}
           <button
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className="md:hidden text-foreground p-2 hover:bg-foreground/5 transition-colors"
+            className="md:hidden text-foreground p-2 hover:bg-foreground/5 transition-colors rounded-full"
           >
-            {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+            {isMobileMenuOpen ? <X size={22} /> : <Menu size={22} />}
           </button>
         </div>
       </div>
@@ -89,13 +88,13 @@ export const Navigation = () => {
       <div className={`md:hidden overflow-hidden transition-all duration-500 ${
         isMobileMenuOpen ? "max-h-screen opacity-100" : "max-h-0 opacity-0"
       }`}>
-        <div className="glass-strong mt-3 mx-4 rounded-lg">
-          <div className="px-6 py-8 space-y-6">
+        <div className="glass-strong mt-3 mx-4 rounded-2xl">
+          <div className="px-6 py-6 space-y-4">
             {navLinks.map((link, index) => (
               <Link
                 key={link.path}
                 to={link.path}
-                className={`block text-lg font-serif tracking-wide transition-all duration-300 animate-slide-in ${
+                className={`block text-base font-serif tracking-wide transition-all duration-300 animate-slide-in ${
                   location.pathname === link.path
                     ? "text-foreground"
                     : "text-muted-foreground hover:text-foreground"
@@ -105,18 +104,12 @@ export const Navigation = () => {
                 {link.name}
               </Link>
             ))}
-            <div className="pt-4 border-t border-border/30 space-y-3">
+            <div className="pt-4 border-t border-border/30">
               <Link
                 to="/waitlist"
-                className="block w-full text-center px-6 py-3 text-sm tracking-wide bg-primary text-primary-foreground"
+                className="block w-full text-center px-6 py-3 text-sm tracking-wide bg-foreground text-background rounded-full"
               >
-                Pre-order Now
-              </Link>
-              <Link
-                to="/studio"
-                className="block w-full text-center px-6 py-3 text-sm tracking-wide border border-border text-foreground hover:bg-foreground/5 transition-colors"
-              >
-                Explore Studio
+                Join Waitlist
               </Link>
             </div>
           </div>

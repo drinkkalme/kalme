@@ -12,7 +12,6 @@ export const EmailCapture = () => {
     e.preventDefault();
     setIsSubmitting(true);
 
-    // Simulate submission
     await new Promise((resolve) => setTimeout(resolve, 1000));
 
     setIsSubmitted(true);
@@ -25,55 +24,51 @@ export const EmailCapture = () => {
   };
 
   return (
-    <section className="py-32 px-6 relative">
+    <section className="py-20 px-6 relative">
       {/* Ambient glow */}
       <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-        <div className="w-[600px] h-[600px] rounded-full gradient-blue-glow opacity-20 animate-breathe" />
+        <div className="w-[500px] h-[500px] rounded-full bg-grey-aurora/20 blur-[100px] animate-breathe" />
       </div>
 
-      <div className="max-w-3xl mx-auto relative z-10">
-        <div className="glass p-12 md:p-16 rounded-2xl text-center">
+      <div className="max-w-2xl mx-auto relative z-10">
+        <div className="glass p-10 md:p-12 rounded-2xl text-center">
           {!isSubmitted ? (
             <>
-              <p className="text-sm tracking-[0.3em] text-primary uppercase mb-6">
-                Early Access
-              </p>
-              <h2 className="text-4xl md:text-5xl font-serif mb-4">
+              <h2 className="text-3xl md:text-4xl font-serif mb-3">
                 Be the first to taste calm.
               </h2>
-              <p className="text-muted-foreground mb-10 max-w-lg mx-auto">
-                Join our waitlist for exclusive pre-order access and special perks 
-                for early supporters.
+              <p className="text-muted-foreground mb-8 max-w-md mx-auto">
+                Join our waitlist for exclusive early access.
               </p>
 
-              <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">
+              <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
                 <input
                   type="email"
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="Enter your email"
-                  className="flex-1 bg-card/50 border border-border px-5 py-4 text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary/50 transition-colors rounded-lg"
+                  className="flex-1 bg-card/50 border border-border px-5 py-3.5 text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-foreground/30 transition-colors rounded-full"
                 />
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="btn-primary whitespace-nowrap disabled:opacity-50 rounded-lg"
+                  className="btn-primary whitespace-nowrap disabled:opacity-50"
                 >
                   {isSubmitting ? "Joining..." : "Join Waitlist"}
                 </button>
               </form>
 
-              <p className="text-xs text-muted-foreground mt-6">
+              <p className="text-xs text-muted-foreground mt-5">
                 Early supporters get exclusive pre-order access.
               </p>
             </>
           ) : (
-            <div className="py-8">
-              <div className="w-16 h-16 rounded-full bg-primary/20 flex items-center justify-center mx-auto mb-6">
-                <Check size={28} className="text-primary" />
+            <div className="py-6">
+              <div className="w-14 h-14 rounded-full bg-foreground/10 flex items-center justify-center mx-auto mb-5">
+                <Check size={24} className="text-foreground/70" />
               </div>
-              <h2 className="text-3xl font-serif mb-4">You're in!</h2>
+              <h2 className="text-2xl font-serif mb-3">You're in!</h2>
               <p className="text-muted-foreground">
                 We'll be in touch soon with exclusive access.
               </p>

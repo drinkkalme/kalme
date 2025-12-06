@@ -3,6 +3,7 @@ import { Navigation } from "@/components/Navigation";
 import { Footer } from "@/components/Footer";
 import { Link } from "react-router-dom";
 import { Sparkles, X, Check } from "lucide-react";
+import { CursorHalo } from "@/components/CursorHalo";
 
 type Ingredient = {
   name: string;
@@ -53,18 +54,19 @@ const Builder = () => {
 
   return (
     <div className="min-h-screen">
+      <CursorHalo />
       <Navigation />
 
       {/* Hero */}
-      <section className="pt-32 pb-12 px-6">
+      <section className="pt-32 pb-8 px-6">
         <div className="max-w-4xl mx-auto text-center">
-          <p className="text-sm tracking-[0.3em] text-muted-foreground uppercase mb-6 opacity-0 animate-fade-in">
+          <p className="text-sm tracking-[0.3em] text-muted-foreground uppercase mb-4 opacity-0 animate-fade-in">
             Custom Sachet Builder
           </p>
-          <h1 className="text-5xl md:text-6xl font-serif mb-6 opacity-0 animate-fade-in-up delay-100">
+          <h1 className="text-4xl md:text-5xl font-serif mb-4 opacity-0 animate-fade-in-up delay-100">
             Build Your Perfect Blend
           </h1>
-          <p className="text-lg text-muted-foreground max-w-xl mx-auto opacity-0 animate-fade-in-up delay-200">
+          <p className="text-muted-foreground max-w-md mx-auto opacity-0 animate-fade-in-up delay-200">
             Choose up to 3 functional ingredients.
           </p>
         </div>
@@ -72,11 +74,11 @@ const Builder = () => {
 
       {/* Builder */}
       <section className="px-6 pb-24">
-        <div className="max-w-6xl mx-auto">
-          <div className="grid lg:grid-cols-[1fr_400px] gap-8">
+        <div className="max-w-5xl mx-auto">
+          <div className="grid lg:grid-cols-[1fr_380px] gap-8">
             {/* Available Ingredients */}
             <div>
-              <h3 className="text-xl font-serif mb-6">Select Ingredients</h3>
+              <h3 className="text-lg font-serif mb-5">Select Ingredients</h3>
               <div className="flex flex-wrap gap-3">
                 {availableIngredients.map((ingredient) => {
                   const isSelected = selectedIngredients.includes(ingredient.name);
@@ -99,40 +101,40 @@ const Builder = () => {
               </div>
             </div>
 
-            {/* Selection Box */}
-            <div>
-              <h3 className="text-xl font-serif mb-6">Your Blend</h3>
+            {/* Selection Box with glow */}
+            <div className="selection-box-glow">
+              <h3 className="text-lg font-serif mb-5">Your Blend</h3>
               <div className="card-premium p-6">
-                <div className="flex items-center justify-between mb-6">
+                <div className="flex items-center justify-between mb-5">
                   <div className="flex items-center gap-2">
-                    <Sparkles size={18} className="text-foreground/60" />
-                    <span className="font-medium">Selected</span>
+                    <Sparkles size={16} className="text-foreground/50" />
+                    <span className="font-medium text-sm">Selected</span>
                   </div>
                   <span className="text-sm text-muted-foreground">{selectedIngredients.length}/3</span>
                 </div>
 
                 {selectedIngredients.length === 0 ? (
-                  <p className="text-muted-foreground text-center py-8">
+                  <p className="text-muted-foreground text-center py-6 text-sm">
                     Click ingredients to add them
                   </p>
                 ) : (
-                  <div className="space-y-3">
+                  <div className="space-y-2">
                     {selectedIngredients.map((name) => {
                       const ing = availableIngredients.find(i => i.name === name);
                       return (
                         <div
                           key={name}
-                          className="flex items-center justify-between p-4 bg-foreground/5 border border-foreground/10 rounded-2xl"
+                          className="flex items-center justify-between p-3 bg-foreground/5 border border-foreground/10 rounded-xl"
                         >
                           <div>
-                            <p className="font-medium">{name}</p>
-                            <p className="text-sm text-muted-foreground">{ing?.benefit}</p>
+                            <p className="font-medium text-sm">{name}</p>
+                            <p className="text-xs text-muted-foreground">{ing?.benefit}</p>
                           </div>
                           <button
                             onClick={() => removeIngredient(name)}
-                            className="w-8 h-8 rounded-full bg-card flex items-center justify-center hover:bg-destructive/20 transition-colors"
+                            className="w-7 h-7 rounded-full bg-card flex items-center justify-center hover:bg-destructive/20 transition-colors"
                           >
-                            <X size={16} />
+                            <X size={14} />
                           </button>
                         </div>
                       );
@@ -142,23 +144,23 @@ const Builder = () => {
 
                 {/* Blend Profile */}
                 {profile && (
-                  <div className="mt-6 pt-6 border-t border-border/30 animate-fade-in">
-                    <h4 className="font-medium mb-4 flex items-center gap-2">
-                      <Sparkles size={14} className="text-foreground/60" />
+                  <div className="mt-5 pt-5 border-t border-border/30 animate-fade-in">
+                    <h4 className="font-medium text-sm mb-3 flex items-center gap-2">
+                      <Sparkles size={12} className="text-foreground/50" />
                       Your Calm Profile
                     </h4>
-                    <div className="space-y-4 text-sm">
+                    <div className="space-y-3 text-sm">
                       <div>
-                        <p className="text-muted-foreground mb-1">Benefits</p>
-                        <p className="text-foreground">{profile.benefits}</p>
+                        <p className="text-muted-foreground text-xs mb-0.5">Benefits</p>
+                        <p className="text-foreground text-sm">{profile.benefits}</p>
                       </div>
                       <div>
-                        <p className="text-muted-foreground mb-1">Flavor Notes</p>
-                        <p className="text-foreground">{profile.flavors}</p>
+                        <p className="text-muted-foreground text-xs mb-0.5">Flavor Notes</p>
+                        <p className="text-foreground text-sm">{profile.flavors}</p>
                       </div>
                       <div>
-                        <p className="text-muted-foreground mb-1">Best For</p>
-                        <ul className="text-foreground">
+                        <p className="text-muted-foreground text-xs mb-0.5">Best For</p>
+                        <ul className="text-foreground text-sm">
                           {profile.useCases.map((use, i) => (
                             <li key={i}>• {use}</li>
                           ))}
@@ -169,11 +171,11 @@ const Builder = () => {
                 )}
 
                 {/* CTA */}
-                <div className="mt-6 pt-6 border-t border-border/30">
-                  <Link to="/waitlist" className="btn-primary w-full text-center block">
+                <div className="mt-5 pt-5 border-t border-border/30">
+                  <Link to="/waitlist" className="btn-primary w-full text-center block text-sm py-3">
                     Join Waitlist for Sachets
                   </Link>
-                  <p className="text-xs text-muted-foreground text-center mt-3">
+                  <p className="text-xs text-muted-foreground text-center mt-2">
                     Custom blends launching soon
                   </p>
                 </div>

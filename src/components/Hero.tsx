@@ -43,22 +43,27 @@ export const Hero = () => {
 
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
-      {/* Aurora Background */}
+      {/* Aurora Background with Animation */}
       <div className="absolute inset-0">
         <div className="absolute inset-0 bg-background" />
-        {/* Main aurora glow */}
-        <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[1000px] h-[600px] bg-gradient-radial from-grey-aurora/40 via-grey-aurora/10 to-transparent rounded-full blur-[100px] animate-aurora" />
+        {/* Main aurora glow - animated */}
+        <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[1200px] h-[700px] bg-gradient-radial from-grey-aurora/50 via-grey-aurora/15 to-transparent rounded-full blur-[120px] animate-aurora-slow" />
         {/* Secondary glow */}
-        <div className="absolute bottom-1/3 right-1/4 w-[400px] h-[400px] bg-grey-glow/10 rounded-full blur-[80px] animate-pulse-soft" />
+        <div className="absolute bottom-1/3 right-1/4 w-[500px] h-[500px] bg-grey-glow/15 rounded-full blur-[100px] animate-pulse-soft" />
+        {/* Tertiary ambient */}
+        <div className="absolute top-1/2 left-1/4 w-[300px] h-[300px] bg-grey-soft/10 rounded-full blur-[80px] animate-breathe" />
         {/* Bottom fade */}
         <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-border to-transparent" />
       </div>
 
       {/* Top Micro-Line */}
       <div className="absolute top-28 left-1/2 -translate-x-1/2 opacity-0 animate-fade-in delay-100">
-        <div className="flex items-center gap-3 text-xs tracking-[0.25em] text-muted-foreground uppercase">
+        <div className="relative flex items-center gap-3 text-xs tracking-[0.25em] text-muted-foreground uppercase">
           <span className="w-8 h-px bg-gradient-to-r from-transparent to-grey-soft/50" />
-          A new way to unwind
+          <span className="relative">
+            A new way to unwind
+            <div className="absolute inset-0 -z-10 blur-xl bg-grey-glow/30 scale-150" />
+          </span>
           <span className="w-8 h-px bg-gradient-to-l from-transparent to-grey-soft/50" />
         </div>
       </div>
@@ -74,12 +79,15 @@ export const Hero = () => {
 
       {/* Content */}
       <div className="relative z-10 max-w-4xl mx-auto px-6 text-center">
-        {/* Main Heading */}
-        <h1 className="text-5xl md:text-7xl lg:text-8xl font-serif leading-[1.05] mb-6 opacity-0 animate-fade-in-up delay-200">
-          For the Evenings
-          <br />
-          That Need Softening
-        </h1>
+        {/* Main Heading with glow behind */}
+        <div className="relative">
+          <div className="absolute inset-0 -z-10 blur-3xl bg-grey-aurora/20 scale-110" />
+          <h1 className="text-5xl md:text-7xl lg:text-8xl font-serif leading-[1.05] mb-6 opacity-0 animate-fade-in-up delay-200">
+            For the Evenings
+            <br />
+            That Need Softening
+          </h1>
+        </div>
 
         {/* Subheadline */}
         <p className="text-xl md:text-2xl text-muted-foreground mb-12 opacity-0 animate-fade-in-up delay-300">
@@ -107,7 +115,7 @@ export const Hero = () => {
       {/* Scroll Indicator */}
       <div className="absolute bottom-12 left-1/2 -translate-x-1/2 opacity-0 animate-fade-in delay-600">
         <a
-          href="#story"
+          href="#ingredients"
           className="flex flex-col items-center gap-2 text-muted-foreground hover:text-foreground transition-colors"
         >
           <span className="text-xs tracking-[0.2em] uppercase">Discover</span>

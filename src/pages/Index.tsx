@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { Navigation } from "@/components/Navigation";
 import { Hero } from "@/components/Hero";
-import { WhySection } from "@/components/WhySection";
 import { IngredientsSection } from "@/components/IngredientsSection";
 import { EmailCapture } from "@/components/EmailCapture";
 import { FAQ } from "@/components/FAQ";
@@ -10,13 +9,13 @@ import { SachetTeaser } from "@/components/SachetTeaser";
 import { Footer } from "@/components/Footer";
 import { SpinToWin } from "@/components/SpinToWin";
 import { FloatingBar } from "@/components/FloatingBar";
+import { CursorHalo } from "@/components/CursorHalo";
 
 const Index = () => {
   const [showSpinPopup, setShowSpinPopup] = useState(false);
   const [hasSeenPopup, setHasSeenPopup] = useState(false);
 
   useEffect(() => {
-    // Show popup on first visit after 3 seconds
     const hasVisited = localStorage.getItem("kalme-visited");
     if (!hasVisited && !hasSeenPopup) {
       const timer = setTimeout(() => {
@@ -30,14 +29,14 @@ const Index = () => {
 
   return (
     <div className="min-h-screen">
+      <CursorHalo />
       <Navigation />
       <Hero />
-      <WhySection />
       <IngredientsSection />
-      <EmailCapture />
-      <FAQ />
       <StudioPreview />
       <SachetTeaser />
+      <EmailCapture />
+      <FAQ />
       <Footer />
       
       {showSpinPopup && (

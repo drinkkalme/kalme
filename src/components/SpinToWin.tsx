@@ -5,6 +5,33 @@ interface SpinToWinProps {
   onClose: () => void;
 }
 
+// Simple confetti component
+const Confetti = () => {
+  const particles = Array.from({ length: 30 }, (_, i) => ({
+    id: i,
+    left: Math.random() * 100,
+    delay: Math.random() * 0.5,
+    duration: 2 + Math.random() * 2,
+  }));
+
+  return (
+    <div className="absolute inset-0 pointer-events-none overflow-hidden">
+      {particles.map((p) => (
+        <div
+          key={p.id}
+          className="absolute w-2 h-2 bg-foreground/30 rounded-full animate-confetti"
+          style={{
+            left: `${p.left}%`,
+            top: "-10px",
+            animationDelay: `${p.delay}s`,
+            animationDuration: `${p.duration}s`,
+          }}
+        />
+      ))}
+    </div>
+  );
+};
+
 export const SpinToWin = ({ onClose }: SpinToWinProps) => {
   const [email, setEmail] = useState("");
   const [step, setStep] = useState<"email" | "spinning" | "won">("email");
@@ -14,8 +41,7 @@ export const SpinToWin = ({ onClose }: SpinToWinProps) => {
     e.preventDefault();
     if (email) {
       setStep("spinning");
-      // Spin to land on "Free Sachet" (specific rotation)
-      const targetRotation = 1800 + 45; // 5 full rotations + offset to land on prize
+      const targetRotation = 1800 + 45;
       setRotation(targetRotation);
       
       setTimeout(() => {
@@ -38,9 +64,9 @@ export const SpinToWin = ({ onClose }: SpinToWinProps) => {
         {step === "email" && (
           <div className="text-center animate-fade-in">
             <Gift className="w-12 h-12 mx-auto mb-6 text-foreground/60" />
-            <h2 className="text-3xl font-serif mb-4">Spin to Win</h2>
+            <h2 className="text-3xl font-serif mb-3">Spin to Win</h2>
             <p className="text-muted-foreground mb-8">
-              Enter your email for a chance to win a free kalmē sachet.
+              Enter your email for a chance to win a free sachet.
             </p>
             
             <form onSubmit={handleSubmit} className="space-y-4">
@@ -62,7 +88,6 @@ export const SpinToWin = ({ onClose }: SpinToWinProps) => {
         {step === "spinning" && (
           <div className="text-center py-8 animate-fade-in">
             <div className="relative w-64 h-64 mx-auto mb-8">
-              {/* Wheel */}
               <div 
                 className="spin-wheel"
                 style={{ 
@@ -70,7 +95,6 @@ export const SpinToWin = ({ onClose }: SpinToWinProps) => {
                   transition: 'transform 4s cubic-bezier(0.2, 0.8, 0.3, 1)'
                 }}
               >
-                {/* Segments */}
                 {[...Array(8)].map((_, i) => (
                   <div 
                     key={i} 
@@ -87,7 +111,6 @@ export const SpinToWin = ({ onClose }: SpinToWinProps) => {
                 ))}
               </div>
               
-              {/* Pointer */}
               <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-2 w-0 h-0 border-l-[10px] border-r-[10px] border-t-[20px] border-l-transparent border-r-transparent border-t-foreground z-10" />
             </div>
             
@@ -96,15 +119,17 @@ export const SpinToWin = ({ onClose }: SpinToWinProps) => {
         )}
 
         {step === "won" && (
-          <div className="text-center py-8 animate-fade-in">
+          <div className="text-center py-8 animate-fade-in relative">
+            <Confetti />
+            
             <div className="relative">
-              {/* Glow effect */}
-              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-48 bg-grey-aurora/40 rounded-full blur-[60px]" />
+              {/* Animated glow effect */}
+              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-56 h-56 bg-grey-aurora/50 rounded-full blur-[80px] animate-pulse-glow" />
               
               <Sparkles className="w-16 h-16 mx-auto mb-6 text-foreground relative z-10" />
             </div>
             
-            <h2 className="text-3xl font-serif mb-4">You Won!</h2>
+            <h2 className="text-3xl font-serif mb-3">You Won!</h2>
             <p className="text-xl text-foreground mb-2">Free Sachet</p>
             <p className="text-muted-foreground mb-8">
               Your reward has been saved. We'll send you details soon.

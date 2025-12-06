@@ -1,7 +1,8 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import { Navigation } from "@/components/Navigation";
 import { Footer } from "@/components/Footer";
-import { Wind, Waves, BookOpen, Timer, PenTool, Play, Pause, RotateCcw, Volume2, VolumeX, RefreshCw, X, Copy, Check } from "lucide-react";
+import { CursorHalo } from "@/components/CursorHalo";
+import { Wind, Waves, BookOpen, Timer, PenTool, Play, Pause, RotateCcw, VolumeX, RefreshCw, X, Copy, Check } from "lucide-react";
 
 type BreathPattern = {
   name: string;
@@ -13,20 +14,21 @@ type BreathPattern = {
 };
 
 const breathPatterns: BreathPattern[] = [
-  { name: "4-4-4-4 Box", inhale: 4, hold: 4, exhale: 4, holdAfter: 4, description: "Classic box breathing for balance" },
-  { name: "4-7-8 Relaxing", inhale: 4, hold: 7, exhale: 8, description: "Deep relaxation for sleep" },
+  { name: "4-4-4-4 Box", inhale: 4, hold: 4, exhale: 4, holdAfter: 4, description: "Classic box breathing" },
+  { name: "4-7-8 Relaxing", inhale: 4, hold: 7, exhale: 8, description: "Deep relaxation" },
   { name: "2.5-2.5-2.5", inhale: 2.5, hold: 2.5, exhale: 2.5, description: "Quick rhythmic calm" },
   { name: "30s Reset", inhale: 2, hold: 0, exhale: 4, description: "Fast anxiety reset" },
 ];
 
+// Distinct noise configurations
 const noiseLibrary = [
-  { name: "Green Noise", frequency: 500 },
-  { name: "Pink Noise", frequency: 300 },
-  { name: "Brown Noise", frequency: 100 },
-  { name: "True Rain", frequency: 350 },
-  { name: "True Wind", frequency: 180 },
-  { name: "Ocean", frequency: 220 },
-  { name: "Night", frequency: 150 },
+  { name: "Green Noise", frequency: 500, type: "green" },
+  { name: "Pink Noise", frequency: 250, type: "pink" },
+  { name: "Brown Noise", frequency: 80, type: "brown" },
+  { name: "Rain", frequency: 400, type: "rain" },
+  { name: "Wind", frequency: 150, type: "wind" },
+  { name: "Ocean", frequency: 200, type: "ocean" },
+  { name: "Night", frequency: 120, type: "night" },
 ];
 
 const journalPrompts = [
@@ -74,11 +76,11 @@ const Studio = () => {
   const [phase, setPhase] = useState<BreathPhase>("ready");
   const [counter, setCounter] = useState(0);
   const [cycles, setCycles] = useState(0);
-  const [breathSound, setBreathSound] = useState(false);
   
   // Noise state
   const [playingNoise, setPlayingNoise] = useState<string | null>(null);
   const audioContextRef = useRef<AudioContext | null>(null);
+  const noiseSourceRef = useRef<AudioBufferSourceNode | null>(null);
   
   // Journal state
   const [currentPrompt, setCurrentPrompt] = useState(journalPrompts[0]);
@@ -165,8 +167,8 @@ const Studio = () => {
     }
   };
 
-  // Noise player
-  const playNoise = (noiseName: string, frequency: number) => {
+  // Enhanced noise player with distinct sounds
+  const playNoise = (noiseName: string, frequency: number, type: string) => {
     if (playingNoise === noiseName) {
       stopNoise();
       return;
@@ -175,34 +177,69 @@ const Studio = () => {
     stopNoise();
     
     audioContextRef.current = new (window.AudioContext || (window as any).webkitAudioContext)();
-    const bufferSize = 2 * audioContextRef.current.sampleRate;
-    const noiseBuffer = audioContextRef.current.createBuffer(1, bufferSize, audioContextRef.current.sampleRate);
+    const ctx = audioContextRef.current;
+    const bufferSize = 2 * ctx.sampleRate;
+    const noiseBuffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
     const output = noiseBuffer.getChannelData(0);
     
+    // Generate different noise types
+    let lastOut = 0;
     for (let i = 0; i < bufferSize; i++) {
-      output[i] = Math.random() * 2 - 1;
+      const white = Math.random() * 2 - 1;
+      
+      switch (type) {
+        case "brown":
+          output[i] = (lastOut + (0.02 * white)) / 1.02;
+          lastOut = output[i];
+          output[i] *= 3.5;
+          break;
+        case "pink":
+          // Simple pink noise approximation
+          output[i] = (lastOut * 0.95) + (white * 0.05);
+          lastOut = output[i];
+          output[i] *= 4;
+          break;
+        case "rain":
+          output[i] = white * (0.3 + Math.random() * 0.7) * (Math.sin(i / 1000) * 0.5 + 0.5);
+          break;
+        case "wind":
+          output[i] = white * (0.2 + Math.sin(i / 5000) * 0.3);
+          break;
+        case "ocean":
+          output[i] = white * (0.3 + Math.sin(i / 10000) * 0.4 + Math.sin(i / 3000) * 0.2);
+          break;
+        case "night":
+          output[i] = white * 0.15 * (1 + Math.sin(i / 20000) * 0.3);
+          break;
+        default: // green noise
+          output[i] = white;
+      }
     }
     
-    const whiteNoise = audioContextRef.current.createBufferSource();
-    whiteNoise.buffer = noiseBuffer;
-    whiteNoise.loop = true;
+    noiseSourceRef.current = ctx.createBufferSource();
+    noiseSourceRef.current.buffer = noiseBuffer;
+    noiseSourceRef.current.loop = true;
     
-    const filter = audioContextRef.current.createBiquadFilter();
+    const filter = ctx.createBiquadFilter();
     filter.type = 'lowpass';
     filter.frequency.value = frequency;
     
-    const gainNode = audioContextRef.current.createGain();
+    const gainNode = ctx.createGain();
     gainNode.gain.value = 0.08;
     
-    whiteNoise.connect(filter);
+    noiseSourceRef.current.connect(filter);
     filter.connect(gainNode);
-    gainNode.connect(audioContextRef.current.destination);
-    whiteNoise.start();
+    gainNode.connect(ctx.destination);
+    noiseSourceRef.current.start();
     
     setPlayingNoise(noiseName);
   };
 
   const stopNoise = () => {
+    if (noiseSourceRef.current) {
+      noiseSourceRef.current.stop();
+      noiseSourceRef.current = null;
+    }
     if (audioContextRef.current) {
       audioContextRef.current.close();
       audioContextRef.current = null;
@@ -245,7 +282,7 @@ const Studio = () => {
 
   const tabs = [
     { id: "breathing" as const, icon: Wind, label: "Breathing" },
-    { id: "noise" as const, icon: Waves, label: "Noise" },
+    { id: "noise" as const, icon: Waves, label: "Sounds" },
     { id: "journal" as const, icon: BookOpen, label: "Journal" },
     { id: "meditation" as const, icon: Timer, label: "Meditations" },
     { id: "freewriter" as const, icon: PenTool, label: "FreeWriter" },
@@ -253,38 +290,39 @@ const Studio = () => {
 
   return (
     <div className="min-h-screen">
+      <CursorHalo />
       <Navigation />
 
       {/* Hero */}
-      <section className="pt-32 pb-12 px-6">
-        <div className="max-w-4xl mx-auto text-center">
-          <p className="text-sm tracking-[0.3em] text-muted-foreground uppercase mb-6 opacity-0 animate-fade-in">
-            Digital Calm Tools
-          </p>
-          <h1 className="text-5xl md:text-6xl font-serif mb-6 opacity-0 animate-fade-in-up delay-100">
+      <section className="pt-32 pb-8 px-6 relative">
+        {/* Section glow */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[400px] bg-grey-aurora/20 rounded-full blur-[100px] pointer-events-none" />
+        
+        <div className="max-w-4xl mx-auto text-center relative z-10">
+          <h1 className="text-4xl md:text-5xl font-serif mb-4 opacity-0 animate-fade-in-up">
             The kalmē Studio
           </h1>
-          <p className="text-lg text-muted-foreground max-w-xl mx-auto opacity-0 animate-fade-in-up delay-200">
+          <p className="text-muted-foreground max-w-md mx-auto opacity-0 animate-fade-in-up delay-100">
             Premium tools for your evening ritual.
           </p>
         </div>
       </section>
 
       {/* Tab Navigation */}
-      <section className="px-6 mb-8">
+      <section className="px-6 mb-6">
         <div className="max-w-4xl mx-auto">
           <div className="flex flex-wrap justify-center gap-2">
             {tabs.map((tab) => (
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
-                className={`flex items-center gap-2 px-5 py-3 rounded-full text-sm transition-all duration-300 ${
+                className={`flex items-center gap-2 px-4 py-2.5 rounded-full text-sm transition-all duration-300 ${
                   activeTab === tab.id
                     ? "bg-foreground text-background"
                     : "bg-card/50 border border-border/50 text-muted-foreground hover:text-foreground hover:border-foreground/30"
                 }`}
               >
-                <tab.icon size={18} />
+                <tab.icon size={16} />
                 {tab.label}
               </button>
             ))}
@@ -297,8 +335,8 @@ const Studio = () => {
         <div className="max-w-4xl mx-auto">
           {/* Breathing Tab */}
           {activeTab === "breathing" && (
-            <div className="space-y-8 animate-fade-in">
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+            <div className="space-y-6 animate-fade-in">
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
                 {breathPatterns.map((pattern) => (
                   <button
                     key={pattern.name}
@@ -306,20 +344,23 @@ const Studio = () => {
                       setSelectedPattern(pattern);
                       resetBreathing();
                     }}
-                    className={`p-4 rounded-2xl text-left transition-all duration-300 ${
+                    className={`p-3 rounded-xl text-left transition-all duration-300 ${
                       selectedPattern.name === pattern.name
                         ? "bg-foreground/10 border border-foreground/30"
                         : "bg-card/50 border border-border/50 hover:border-foreground/20"
                     }`}
                   >
                     <p className="font-medium text-sm">{pattern.name}</p>
-                    <p className="text-xs text-muted-foreground mt-1">{pattern.description}</p>
+                    <p className="text-xs text-muted-foreground mt-0.5">{pattern.description}</p>
                   </button>
                 ))}
               </div>
 
-              <div className="flex flex-col items-center py-12">
-                <div className="relative w-64 h-64 md:w-80 md:h-80">
+              <div className="flex flex-col items-center py-10">
+                <div className="relative w-56 h-56 md:w-72 md:h-72">
+                  {/* Background glow */}
+                  <div className="absolute inset-0 rounded-full bg-grey-aurora/20 blur-[60px] pointer-events-none" />
+                  
                   <div className="absolute inset-0 rounded-full border border-border/30" />
                   
                   <div
@@ -327,8 +368,8 @@ const Studio = () => {
                     style={{ transform: `scale(${getCircleScale()})` }}
                   >
                     <div className="text-center">
-                      <p className="text-5xl font-serif mb-2">{Math.ceil(counter)}</p>
-                      <p className="text-lg text-muted-foreground tracking-wide">
+                      <p className="text-4xl font-serif mb-1">{Math.ceil(counter)}</p>
+                      <p className="text-muted-foreground tracking-wide text-sm">
                         {getPhaseLabel()}
                       </p>
                     </div>
@@ -342,22 +383,22 @@ const Studio = () => {
                   )}
                 </div>
 
-                <div className="flex gap-4 mt-8">
+                <div className="flex gap-3 mt-6">
                   <button
                     onClick={() => setIsBreathing(!isBreathing)}
-                    className="btn-primary flex items-center gap-2"
+                    className="btn-primary flex items-center gap-2 text-sm py-3"
                   >
-                    {isBreathing ? <Pause size={20} /> : <Play size={20} />}
+                    {isBreathing ? <Pause size={18} /> : <Play size={18} />}
                     {isBreathing ? "Pause" : "Begin"}
                   </button>
-                  <button onClick={resetBreathing} className="btn-secondary flex items-center gap-2">
-                    <RotateCcw size={20} />
+                  <button onClick={resetBreathing} className="btn-secondary flex items-center gap-2 text-sm py-3">
+                    <RotateCcw size={18} />
                     Reset
                   </button>
                 </div>
 
                 {cycles > 0 && (
-                  <p className="text-muted-foreground mt-6">
+                  <p className="text-muted-foreground mt-4 text-sm">
                     {cycles} cycle{cycles !== 1 ? "s" : ""} completed
                   </p>
                 )}
@@ -368,34 +409,39 @@ const Studio = () => {
           {/* Noise Tab */}
           {activeTab === "noise" && (
             <div className="animate-fade-in">
-              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                {noiseLibrary.map((noise) => (
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
+                {noiseLibrary.map((noise, index) => (
                   <button
                     key={noise.name}
-                    onClick={() => playNoise(noise.name, noise.frequency)}
-                    className={`noise-tile ${playingNoise === noise.name ? 'playing' : ''}`}
+                    onClick={() => playNoise(noise.name, noise.frequency, noise.type)}
+                    className={`noise-tile relative overflow-hidden ${playingNoise === noise.name ? 'playing' : ''}`}
                   >
-                    <div className="flex items-end justify-center gap-1 h-8 mb-4">
-                      {[...Array(5)].map((_, i) => (
-                        <div 
-                          key={i} 
-                          className={`waveform-bar ${playingNoise === noise.name ? '' : 'h-2'}`}
-                          style={playingNoise === noise.name ? { animationDelay: `${i * 0.1}s` } : { height: '8px' }}
-                        />
-                      ))}
+                    {/* Subtle glow behind */}
+                    <div className="absolute inset-0 bg-grey-aurora/0 group-hover:bg-grey-aurora/10 blur-xl transition-all duration-500 pointer-events-none" />
+                    
+                    <div className="relative z-10">
+                      <div className="flex items-end justify-center gap-0.5 h-6 mb-3">
+                        {[...Array(5)].map((_, i) => (
+                          <div 
+                            key={i} 
+                            className={`waveform-bar ${playingNoise === noise.name ? '' : 'h-1.5'}`}
+                            style={playingNoise === noise.name ? { animationDelay: `${i * 0.1}s` } : { height: '6px' }}
+                          />
+                        ))}
+                      </div>
+                      <p className="font-medium text-sm">{noise.name}</p>
                     </div>
-                    <p className="font-medium text-sm">{noise.name}</p>
                   </button>
                 ))}
               </div>
               
               {playingNoise && (
-                <div className="mt-8 text-center">
+                <div className="mt-6 text-center">
                   <button
                     onClick={stopNoise}
-                    className="btn-secondary inline-flex items-center gap-2"
+                    className="btn-secondary inline-flex items-center gap-2 text-sm py-3"
                   >
-                    <VolumeX size={18} />
+                    <VolumeX size={16} />
                     Stop Sound
                   </button>
                 </div>
@@ -405,18 +451,18 @@ const Studio = () => {
 
           {/* Journal Tab */}
           {activeTab === "journal" && (
-            <div className="animate-fade-in max-w-2xl mx-auto">
-              <div className="prompt-card text-center">
-                <p className="text-2xl md:text-3xl font-serif leading-relaxed text-foreground/90">
+            <div className="animate-fade-in max-w-xl mx-auto">
+              <div className="prompt-card text-center flex items-center justify-center">
+                <p className="text-xl md:text-2xl font-serif leading-relaxed text-foreground/90">
                   "{currentPrompt}"
                 </p>
               </div>
-              <div className="text-center mt-8">
+              <div className="text-center mt-6">
                 <button
                   onClick={newPrompt}
-                  className="btn-secondary inline-flex items-center gap-2"
+                  className="btn-secondary inline-flex items-center gap-2 text-sm py-3"
                 >
-                  <RefreshCw size={18} />
+                  <RefreshCw size={16} />
                   New Prompt
                 </button>
               </div>
@@ -425,16 +471,16 @@ const Studio = () => {
 
           {/* Meditation Tab */}
           {activeTab === "meditation" && (
-            <div className="animate-fade-in grid md:grid-cols-3 gap-4">
+            <div className="animate-fade-in grid md:grid-cols-3 gap-3">
               {microMeditations.map((meditation, index) => (
                 <button
                   key={index}
                   onClick={() => setSelectedMeditation(meditation)}
-                  className="card-premium p-6 text-left hover:scale-[1.02] transition-transform"
+                  className="card-premium p-5 text-left"
                 >
-                  <div className="flex items-center justify-between mb-4">
-                    <h3 className="text-lg font-serif">{meditation.title}</h3>
-                    <span className="text-xs text-muted-foreground bg-foreground/5 px-3 py-1 rounded-full">
+                  <div className="flex items-center justify-between mb-3">
+                    <h3 className="text-base font-serif">{meditation.title}</h3>
+                    <span className="text-xs text-muted-foreground bg-foreground/5 px-2 py-1 rounded-full">
                       {meditation.duration}
                     </span>
                   </div>
@@ -450,11 +496,10 @@ const Studio = () => {
           {activeTab === "freewriter" && (
             <div className="animate-fade-in">
               {!freeWriterActive ? (
-                <div className="text-center py-20">
-                  <h3 className="text-2xl font-serif mb-4">FreeWriter</h3>
-                  <p className="text-muted-foreground mb-8 max-w-md mx-auto">
-                    Write freely for 5 minutes. No backspace. 
-                    Let your thoughts flow.
+                <div className="text-center py-16">
+                  <h3 className="text-xl font-serif mb-3">FreeWriter</h3>
+                  <p className="text-muted-foreground mb-6 max-w-sm mx-auto text-sm">
+                    Write freely for 5 minutes. No backspace. Let your thoughts flow.
                   </p>
                   <button
                     onClick={() => {
@@ -462,28 +507,28 @@ const Studio = () => {
                       setFreeWriterText("");
                       setFreeWriterTime(300);
                     }}
-                    className="btn-primary"
+                    className="btn-primary text-sm py-3"
                   >
                     Start Writing
                   </button>
                 </div>
               ) : (
                 <div className="relative">
-                  <div className="flex items-center justify-between mb-4">
-                    <span className="text-2xl font-serif">{formatTime(freeWriterTime)}</span>
+                  <div className="flex items-center justify-between mb-3">
+                    <span className="text-xl font-serif">{formatTime(freeWriterTime)}</span>
                     <div className="flex gap-2">
                       <button
                         onClick={copyText}
-                        className="btn-ghost flex items-center gap-2"
+                        className="btn-ghost flex items-center gap-2 text-sm py-2"
                       >
-                        {copied ? <Check size={16} /> : <Copy size={16} />}
+                        {copied ? <Check size={14} /> : <Copy size={14} />}
                         {copied ? "Copied" : "Copy"}
                       </button>
                       <button
                         onClick={() => setFreeWriterActive(false)}
-                        className="btn-ghost"
+                        className="btn-ghost py-2"
                       >
-                        <X size={18} />
+                        <X size={16} />
                       </button>
                     </div>
                   </div>
@@ -495,7 +540,7 @@ const Studio = () => {
                         e.preventDefault();
                       }
                     }}
-                    className="freewriter-input min-h-[400px] p-6 bg-card/30 border border-border/30 rounded-2xl"
+                    className="freewriter-input min-h-[350px] p-5 bg-card/30 border border-border/30 rounded-xl"
                     placeholder="Start writing..."
                     autoFocus
                   />
@@ -509,36 +554,36 @@ const Studio = () => {
       {/* Meditation Modal */}
       {selectedMeditation && (
         <div className="meditation-modal animate-fade-in">
-          <div className="relative max-w-lg mx-6 p-8">
+          <div className="relative max-w-md mx-6 p-8">
             {/* Glow */}
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[300px] bg-grey-aurora/30 rounded-full blur-[100px] pointer-events-none" />
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[350px] h-[250px] bg-grey-aurora/30 rounded-full blur-[80px] pointer-events-none" />
             
             <div className="relative z-10 text-center">
               <button
                 onClick={() => setSelectedMeditation(null)}
-                className="absolute -top-4 -right-4 w-10 h-10 rounded-full bg-card border border-border/50 flex items-center justify-center hover:border-foreground/30 transition-colors"
+                className="absolute -top-3 -right-3 w-9 h-9 rounded-full bg-card border border-border/50 flex items-center justify-center hover:border-foreground/30 transition-colors"
               >
-                <X size={18} />
+                <X size={16} />
               </button>
               
-              <span className="text-sm text-muted-foreground">{selectedMeditation.duration}</span>
-              <h2 className="text-3xl font-serif mt-2 mb-8">{selectedMeditation.title}</h2>
+              <span className="text-xs text-muted-foreground">{selectedMeditation.duration}</span>
+              <h2 className="text-2xl font-serif mt-1 mb-6">{selectedMeditation.title}</h2>
               
-              <div className="space-y-4">
+              <div className="space-y-3">
                 {selectedMeditation.steps.map((step, i) => (
                   <div 
                     key={i}
-                    className="p-4 bg-card/30 border border-border/30 rounded-2xl animate-fade-in-up"
+                    className="p-3 bg-card/30 border border-border/30 rounded-xl animate-fade-in-up"
                     style={{ animationDelay: `${i * 0.2}s` }}
                   >
-                    <p className="text-foreground/90">{step}</p>
+                    <p className="text-foreground/90 text-sm">{step}</p>
                   </div>
                 ))}
               </div>
               
               <button
                 onClick={() => setSelectedMeditation(null)}
-                className="btn-secondary mt-8"
+                className="btn-secondary mt-6 text-sm py-3"
               >
                 Close
               </button>

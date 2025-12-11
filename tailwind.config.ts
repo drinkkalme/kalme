@@ -52,6 +52,12 @@ export default {
           soft: "hsl(var(--grey-soft))",
           aurora: "hsl(var(--grey-aurora))",
         },
+        metallic: {
+          blue: "hsl(var(--metallic-blue))",
+          glow: "hsl(var(--metallic-blue-glow))",
+          soft: "hsl(var(--metallic-blue-soft))",
+          deep: "hsl(var(--metallic-blue-deep))",
+        },
       },
       fontFamily: {
         sans: ["Inter", "system-ui", "sans-serif"],
@@ -77,10 +83,11 @@ export default {
         "accordion-up": "accordion-up 0.2s ease-out",
       },
       boxShadow: {
-        'premium': '0 25px 50px -12px hsl(0 0% 50% / 0.15)',
-        'glow': '0 0 40px hsl(0 0% 50% / 0.2)',
-        'glow-strong': '0 0 60px hsl(0 0% 60% / 0.3)',
-        'aurora': '0 0 100px hsl(0 0% 40% / 0.3)',
+        'premium': '0 25px 50px -12px hsl(210 80% 55% / 0.15)',
+        'glow': '0 0 40px hsl(210 80% 55% / 0.2)',
+        'glow-strong': '0 0 60px hsl(210 80% 55% / 0.3)',
+        'aurora': '0 0 100px hsl(210 70% 45% / 0.3)',
+        'metallic': '0 0 30px hsl(210 80% 55% / 0.25), 0 0 60px hsl(210 80% 55% / 0.1)',
       },
     },
   },

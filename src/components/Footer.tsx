@@ -15,15 +15,19 @@ const XIcon = ({ size = 20 }: { size?: number }) => (
 
 export const Footer = () => {
   return (
-    <footer className="py-16 px-6 border-t border-border/30 relative">
+    <footer className="relative py-16 px-6 border-t border-primary/10">
       {/* Footer glow */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[200px] bg-grey-aurora/10 rounded-full blur-[80px] pointer-events-none" />
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[200px] rounded-full blur-[100px] pointer-events-none"
+        style={{
+          background: 'radial-gradient(ellipse at center, hsl(210 80% 55% / 0.1) 0%, hsl(0 0% 25% / 0.05) 50%, transparent 70%)'
+        }}
+      />
       
       <div className="max-w-5xl mx-auto relative z-10">
         <div className="grid md:grid-cols-3 gap-10 mb-12">
           {/* Brand */}
           <div>
-            <Link to="/" className="text-2xl font-serif tracking-wider">
+            <Link to="/" className="text-2xl font-serif tracking-wider hover:text-primary transition-colors">
               kalmē
             </Link>
             <p className="mt-3 text-sm text-muted-foreground leading-relaxed">
@@ -37,16 +41,16 @@ export const Footer = () => {
               Explore
             </h4>
             <nav className="space-y-2 text-sm">
-              <Link to="/studio" className="block text-foreground/70 hover:text-foreground transition-colors">
+              <Link to="/studio" className="block text-foreground/70 hover:text-primary transition-colors">
                 kalmē Studio
               </Link>
-              <Link to="/builder" className="block text-foreground/70 hover:text-foreground transition-colors">
+              <Link to="/builder" className="block text-foreground/70 hover:text-primary transition-colors">
                 Custom Blend
               </Link>
-              <Link to="/about" className="block text-foreground/70 hover:text-foreground transition-colors">
+              <Link to="/about" className="block text-foreground/70 hover:text-primary transition-colors">
                 About
               </Link>
-              <Link to="/waitlist" className="block text-foreground/70 hover:text-foreground transition-colors">
+              <Link to="/waitlist" className="block text-foreground/70 hover:text-primary transition-colors">
                 Join Waitlist
               </Link>
             </nav>
@@ -62,7 +66,7 @@ export const Footer = () => {
                 href="https://instagram.com/drinkkalme"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-9 h-9 rounded-full bg-card/50 border border-border/50 flex items-center justify-center text-muted-foreground hover:text-foreground hover:border-foreground/30 transition-all"
+                className="w-9 h-9 rounded-full glass flex items-center justify-center text-muted-foreground hover:text-primary hover:border-primary/30 hover:shadow-glow transition-all"
               >
                 <Instagram size={16} />
               </a>
@@ -70,7 +74,7 @@ export const Footer = () => {
                 href="https://tiktok.com/@drinkkalme"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-9 h-9 rounded-full bg-card/50 border border-border/50 flex items-center justify-center text-muted-foreground hover:text-foreground hover:border-foreground/30 transition-all"
+                className="w-9 h-9 rounded-full glass flex items-center justify-center text-muted-foreground hover:text-primary hover:border-primary/30 hover:shadow-glow transition-all"
               >
                 <TikTokIcon size={16} />
               </a>
@@ -78,13 +82,13 @@ export const Footer = () => {
                 href="https://twitter.com/drinkkalme"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-9 h-9 rounded-full bg-card/50 border border-border/50 flex items-center justify-center text-muted-foreground hover:text-foreground hover:border-foreground/30 transition-all"
+                className="w-9 h-9 rounded-full glass flex items-center justify-center text-muted-foreground hover:text-primary hover:border-primary/30 hover:shadow-glow transition-all"
               >
                 <XIcon size={16} />
               </a>
               <a
                 href="mailto:drinkkalme@gmail.com"
-                className="w-9 h-9 rounded-full bg-card/50 border border-border/50 flex items-center justify-center text-muted-foreground hover:text-foreground hover:border-foreground/30 transition-all"
+                className="w-9 h-9 rounded-full glass flex items-center justify-center text-muted-foreground hover:text-primary hover:border-primary/30 hover:shadow-glow transition-all"
               >
                 <Mail size={16} />
               </a>
@@ -93,7 +97,7 @@ export const Footer = () => {
         </div>
 
         {/* Bottom */}
-        <div className="pt-8 border-t border-border/20 flex flex-col md:flex-row justify-between items-center gap-3">
+        <div className="pt-8 border-t border-primary/10 flex flex-col md:flex-row justify-between items-center gap-3">
           <p className="text-xs text-muted-foreground">
             © 2025 kalmē. All rights reserved.
           </p>

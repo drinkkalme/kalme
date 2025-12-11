@@ -58,8 +58,15 @@ const Builder = () => {
       <Navigation />
 
       {/* Hero */}
-      <section className="pt-32 pb-8 px-6">
-        <div className="max-w-4xl mx-auto text-center">
+      <section className="pt-32 pb-8 px-6 relative section-glow">
+        {/* Section glow */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[300px] rounded-full blur-[100px] pointer-events-none"
+          style={{
+            background: 'radial-gradient(ellipse at center, hsl(210 80% 55% / 0.12) 0%, transparent 70%)'
+          }}
+        />
+        
+        <div className="max-w-4xl mx-auto text-center relative z-10">
           <p className="text-sm tracking-[0.3em] text-muted-foreground uppercase mb-4 opacity-0 animate-fade-in">
             Custom Sachet Builder
           </p>
@@ -93,7 +100,7 @@ const Builder = () => {
                         isSelected ? 'selected' : ''
                       } ${isDisabled ? 'opacity-40 cursor-not-allowed' : ''}`}
                     >
-                      {isSelected && <Check size={14} />}
+                      {isSelected && <Check size={14} className="text-primary" />}
                       <span>{ingredient.name}</span>
                     </button>
                   );
@@ -101,13 +108,13 @@ const Builder = () => {
               </div>
             </div>
 
-            {/* Selection Box with glow */}
+            {/* Selection Box with metallic blue glow */}
             <div className="selection-box-glow">
               <h3 className="text-lg font-serif mb-5">Your Blend</h3>
               <div className="card-premium p-6">
                 <div className="flex items-center justify-between mb-5">
                   <div className="flex items-center gap-2">
-                    <Sparkles size={16} className="text-foreground/50" />
+                    <Sparkles size={16} className="text-primary" />
                     <span className="font-medium text-sm">Selected</span>
                   </div>
                   <span className="text-sm text-muted-foreground">{selectedIngredients.length}/3</span>
@@ -124,7 +131,7 @@ const Builder = () => {
                       return (
                         <div
                           key={name}
-                          className="flex items-center justify-between p-3 bg-foreground/5 border border-foreground/10 rounded-xl"
+                          className="flex items-center justify-between p-3 glass rounded-xl"
                         >
                           <div>
                             <p className="font-medium text-sm">{name}</p>
@@ -132,7 +139,7 @@ const Builder = () => {
                           </div>
                           <button
                             onClick={() => removeIngredient(name)}
-                            className="w-7 h-7 rounded-full bg-card flex items-center justify-center hover:bg-destructive/20 transition-colors"
+                            className="w-7 h-7 rounded-full glass flex items-center justify-center hover:bg-destructive/20 hover:border-destructive/30 transition-all"
                           >
                             <X size={14} />
                           </button>
@@ -144,9 +151,9 @@ const Builder = () => {
 
                 {/* Blend Profile */}
                 {profile && (
-                  <div className="mt-5 pt-5 border-t border-border/30 animate-fade-in">
+                  <div className="mt-5 pt-5 border-t border-primary/10 animate-fade-in">
                     <h4 className="font-medium text-sm mb-3 flex items-center gap-2">
-                      <Sparkles size={12} className="text-foreground/50" />
+                      <Sparkles size={12} className="text-primary" />
                       Your Calm Profile
                     </h4>
                     <div className="space-y-3 text-sm">
@@ -171,7 +178,7 @@ const Builder = () => {
                 )}
 
                 {/* CTA */}
-                <div className="mt-5 pt-5 border-t border-border/30">
+                <div className="mt-5 pt-5 border-t border-primary/10">
                   <Link to="/waitlist" className="btn-primary w-full text-center block text-sm py-3">
                     Join Waitlist for Sachets
                   </Link>

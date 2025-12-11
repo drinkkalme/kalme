@@ -22,13 +22,17 @@ export const FloatingBar = ({ onSpinClick }: FloatingBarProps) => {
     <div className="floating-bar animate-fade-in-up">
       <Link 
         to="/waitlist" 
-        className="px-5 py-2.5 bg-foreground text-background text-sm font-medium rounded-full hover:scale-[1.02] transition-transform"
+        className="px-5 py-2.5 text-sm font-medium rounded-full transition-all duration-300 hover:scale-[1.02]"
+        style={{
+          background: 'linear-gradient(135deg, hsl(210 80% 55%), hsl(210 70% 45%))',
+          color: 'white',
+        }}
       >
         Join Waitlist
       </Link>
       <button 
         onClick={onSpinClick}
-        className="px-5 py-2.5 text-foreground text-sm font-medium rounded-full hover:bg-foreground/10 transition-colors"
+        className="px-5 py-2.5 text-foreground text-sm font-medium rounded-full hover:bg-primary/10 transition-all duration-300"
       >
         Spin to Win
       </button>
